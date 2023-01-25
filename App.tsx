@@ -1,118 +1,97 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
+/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import type {PropsWithChildren} from 'react';
 import {
+  Image,
   SafeAreaView,
   ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
-  useColorScheme,
   View,
 } from 'react-native';
+import data from './data.json';
+import {HandThumbUpIcon} from 'react-native-heroicons/solid';
+function App(): JSX.Element {
+  //   const [usersData, setUsersData] = useState([]);
+  //   useEffect(() => {
+  //     const getUsersData = async () => {
+  //       try {
+  //         const res = await axios.get(
+  //           'http://www.omdbapi.com/?i=tt3896198&apikey=6b5eacc4',
+  //         );
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({children, title}: SectionProps): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+  //         setUsersData(res.data.data);
+  //       } catch (error) {
+  //         console.log('error', error);
+  //       }
+  //     };
+  //     getUsersData();
+  //   }, []);
   return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
+    <View style={styles.sectionView}>
+      <SafeAreaView>
+        <Text style={{margin: 15, fontSize: 25, color: 'white'}}>Movies</Text>
+        <ScrollView style={styles.scrollView}>
+          {data.map((movieItem, id) => (
+            <View key={id} style={styles.movieStyle}>
+              <Image style={styles.image} source={{uri: movieItem.Poster}} />
+              <View style={styles.title}>
+                <Text
+                  style={{
+                    flex: 1,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#fff',
+                  }}>
+                  {movieItem.Title}
+                </Text>
+                <Text
+                  style={{
+                    flex: 1,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#fff',
+                  }}>
+                  {movieItem.Year}
+                </Text>
+              </View>
+              <HandThumbUpIcon />
+            </View>
+          ))}
+        </ScrollView>
+      </SafeAreaView>
     </View>
   );
 }
 
-function App(): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-    // <View> </View>
-  );
-}
-
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  sectionView: {
+    height: '100%',
+    backgroundColor: '#333',
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
+  movieStyle: {
+    backgroundColor: '#6666',
+    borderRadius: 10,
+    height: 200,
+    width: '100%',
+    marginTop: 5,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
+  scrollView: {
+    // backgroundColor: 'pink',
+    marginHorizontal: 20,
   },
-  highlight: {
-    fontWeight: '700',
+  image: {
+    width: 100,
+    height: '100%',
+    borderRadius: 10,
+  },
+  title: {
+    display: 'flex',
+    width: '50%',
+    padding: 5,
   },
 });
 
