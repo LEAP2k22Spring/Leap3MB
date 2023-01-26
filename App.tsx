@@ -1,96 +1,99 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
+/**
+ * Sample React Native App
+ * https://github.com/facebook/react-native
+ *
+ * @format
+ */
+
+import React, {useState} from 'react';
 import {
-  Image,
+  Appearance,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
   SafeAreaView,
-  ScrollView,
   StyleSheet,
+  Switch,
   Text,
+  TextInput,
+  TouchableNativeFeedback,
   View,
 } from 'react-native';
-import data from './data.json';
-import {HandThumbUpIcon} from 'react-native-heroicons/solid';
-function App(): JSX.Element {
-  //   const [usersData, setUsersData] = useState([]);
-  //   useEffect(() => {
-  //     const getUsersData = async () => {
-  //       try {
-  //         const res = await axios.get(
-  //           'http://www.omdbapi.com/?i=tt3896198&apikey=6b5eacc4',
-  //         );
 
-  //         setUsersData(res.data.data);
-  //       } catch (error) {
-  //         console.log('error', error);
-  //       }
-  //     };
-  //     getUsersData();
-  //   }, []);
+function App(): JSX.Element {
+  const colorScheme = Appearance.getColorScheme();
+  const [isEnabled, setIsEnabled] = useState(colorScheme === 'light');
+  const [text, onChangeText] = useState('Hey');
+  // const [isEnabled1, setIsEnabled1] = useState(false);
+  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+  console.log(text);
+
   return (
-    <View style={styles.sectionView}>
-      <SafeAreaView>
-        <Text style={{margin: 15, fontSize: 25, color: 'white'}}>Movies</Text>
-        <ScrollView style={styles.scrollView}>
-          {data.map((movieItem, id) => (
-            <View key={id} style={styles.movieStyle}>
-              <Image style={styles.image} source={{uri: movieItem.Poster}} />
-              <View style={styles.title}>
-                <View
-                  style={{
-                    flex: 2,
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
-                  <Text style={{color: '#fff'}}>{movieItem.Title}</Text>
-                </View>
-                <View
-                  style={{
-                    flex: 2,
-                    display: 'flex',
-                    justifyContent: 'center',
-                  }}>
-                  <Text style={{color: '#fff'}}>{movieItem.Year}</Text>
-                </View>
-              </View>
-              <View style={{flex:1, alignItems:'center'}}>
-                <HandThumbUpIcon />
-              </View>
+    <SafeAreaView>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.container}>
+        <TouchableNativeFeedback
+          onPress={() => {
+            Keyboard.dismiss();
+          }}>
+          <View
+            style={[
+              styles.container,
+              {
+                backgroundColor: isEnabled ? 'white' : 'black',
+              },
+            ]}>
+            <View style={{flex: 1, alignItems: 'flex-end', paddingRight: 20}}>
+              <Switch
+                trackColor={{false: '#767577', true: '#008000'}}
+                thumbColor={isEnabled ? '#f4f3f4' : '#f4f3f4'}
+                ios_backgroundColor="#f4f3f4"
+                onValueChange={toggleSwitch}
+                value={isEnabled}
+              />
             </View>
-          ))}
-        </ScrollView>
-      </SafeAreaView>
-    </View>
+            <View
+              style={{
+                flex: 1,
+                alignItems: 'center',
+                justifyContent: 'flex-end',
+              }}>
+              <Text style={{color: isEnabled ? 'black' : 'white'}}>
+                {isEnabled ? 'Light mode' : 'Dark mode'}
+              </Text>
+              <TextInput
+                style={styles.input}
+                onChangeText={onChangeText}
+                value={text}
+                keyboardType={'phone-pad'}
+              />
+            </View>
+          </View>
+        </TouchableNativeFeedback>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 }
+
 const styles = StyleSheet.create({
-  sectionView: {
-    height: '100%',
-    backgroundColor: '#333',
-  },
-  movieStyle: {
-    backgroundColor: '#6666',
-    borderRadius: 10,
-    height: 150,
+  sectionHeader: {
+    paddingHorizontal: 24,
+    backgroundColor: '#FFFF00',
     width: '100%',
-    marginTop: 5,
+    height: 100,
+  },
+  container: {
     display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  scrollView: {
-    // backgroundColor: 'pink',
-    marginHorizontal: 20,
-  },
-  image: {
-    width: 100,
+    width: '100%',
     height: '100%',
-    borderRadius: 10,
   },
-  title: {
-    display: 'flex',
-    width: '50%',
+  input: {
+    width: 200,
+    height: 50,
     padding: 5,
+    borderWidth: 1,
   },
 });
 
