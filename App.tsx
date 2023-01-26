@@ -35,26 +35,27 @@ function App(): JSX.Element {
             <View key={id} style={styles.movieStyle}>
               <Image style={styles.image} source={{uri: movieItem.Poster}} />
               <View style={styles.title}>
-                <Text
+                <View
                   style={{
-                    flex: 1,
-                    alignItems: 'center',
+                    flex: 2,
+                    display: 'flex',
                     justifyContent: 'center',
-                    color: '#fff',
+                    alignItems: 'center',
                   }}>
-                  {movieItem.Title}
-                </Text>
-                <Text
+                  <Text style={{color: '#fff'}}>{movieItem.Title}</Text>
+                </View>
+                <View
                   style={{
-                    flex: 1,
-                    alignItems: 'center',
+                    flex: 2,
+                    display: 'flex',
                     justifyContent: 'center',
-                    color: '#fff',
                   }}>
-                  {movieItem.Year}
-                </Text>
+                  <Text style={{color: '#fff'}}>{movieItem.Year}</Text>
+                </View>
               </View>
-              <HandThumbUpIcon />
+              <View style={{flex:1, alignItems:'center'}}>
+                <HandThumbUpIcon />
+              </View>
             </View>
           ))}
         </ScrollView>
@@ -62,7 +63,6 @@ function App(): JSX.Element {
     </View>
   );
 }
-
 const styles = StyleSheet.create({
   sectionView: {
     height: '100%',
@@ -71,13 +71,12 @@ const styles = StyleSheet.create({
   movieStyle: {
     backgroundColor: '#6666',
     borderRadius: 10,
-    height: 200,
+    height: 150,
     width: '100%',
     marginTop: 5,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
   },
   scrollView: {
     // backgroundColor: 'pink',
