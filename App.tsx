@@ -6,9 +6,11 @@
  * @format
  */
 
-import React, {useState} from 'react';
+import React, {useReducer, useState} from 'react';
 import {
+  Alert,
   Appearance,
+  Button,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
@@ -20,58 +22,80 @@ import {
   TouchableNativeFeedback,
   View,
 } from 'react-native';
+import {HandThumbUpIcon} from 'react-native-heroicons/solid';
+
+const initialTodos = {
+  list: [],
+  value: '',
+};
+const reducer = (state: any, action: any) => {
+  switch (action.type) {
+    case 'ADD':
+      return {...state, list: [...state.list, action.id, action.payload]};
+    case 'DELETE':
+      return state.filter((todo: any) => todo.id === action.id);
+    case 'ONCHANGE':
+      return {...state, value: action.payload};
+  }
+};
 
 function App(): JSX.Element {
   const colorScheme = Appearance.getColorScheme();
   const [isEnabled, setIsEnabled] = useState(colorScheme === 'light');
-  const [text, onChangeText] = useState('Hey');
-  // const [isEnabled1, setIsEnabled1] = useState(false);
+  // const [count, setCount] = useState(0);
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
-  console.log(text);
+  const [state, dispatch] = useReducer(reducer, initialTodos);
+
+  console.log(state);
+  let count = 0;
+
+  const handleAdd = () => {
+    if (state.value === '') {
+      return;
+    }
+    dispatch({type: 'ADD', id: count++, payload: state.value});
+  };
+  function Todos() {}
 
   return (
     <SafeAreaView>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.container}>
-        <TouchableNativeFeedback
-          onPress={() => {
-            Keyboard.dismiss();
-          }}>
-          <View
-            style={[
-              styles.container,
-              {
-                backgroundColor: isEnabled ? 'white' : 'black',
-              },
-            ]}>
-            <View style={{flex: 1, alignItems: 'flex-end', paddingRight: 20}}>
-              <Switch
-                trackColor={{false: '#767577', true: '#008000'}}
-                thumbColor={isEnabled ? '#f4f3f4' : '#f4f3f4'}
-                ios_backgroundColor="#f4f3f4"
-                onValueChange={toggleSwitch}
-                value={isEnabled}
-              />
-            </View>
-            <View
-              style={{
-                flex: 1,
-                alignItems: 'center',
-                justifyContent: 'flex-end',
-              }}>
-              <Text style={{color: isEnabled ? 'black' : 'white'}}>
-                {isEnabled ? 'Light mode' : 'Dark mode'}
-              </Text>
-              <TextInput
-                style={styles.input}
-                onChangeText={onChangeText}
-                value={text}
-                keyboardType={'phone-pad'}
+        <View>
+          <View style={styles.sectionHeader}>
+            <HandThumbUpIcon />
+            <Text>List</Text>
+          </View>
+          <View style={styles.sectionContainer}>
+            <TextInput
+              style={styles.input}
+              value={state.value}
+              onChangeText={text => dispatch({type: 'ONCHANGE', payload: text})}
+              // keyboardType={'phone-pad'}
+            />
+            <View style={styles.buttonStyle}>
+              <Button
+                onPress={handleAdd}
+                title="Add"
+                color="#ffff"
+                accessibilityLabel="Learn more about this purple button"
               />
             </View>
           </View>
-        </TouchableNativeFeedback>
+          <View style={styles.sectionList}>
+            {state.list.map((value: string, index: number) => {
+              return (
+                <Text
+                  style={{
+                    color: isEnabled ? 'black' : 'yellow',
+                  }}>
+                  {index + 1}) {value}
+                </Text>
+              );
+            })}
+          </View>
+        </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
@@ -79,13 +103,33 @@ function App(): JSX.Element {
 
 const styles = StyleSheet.create({
   sectionHeader: {
-    paddingHorizontal: 24,
-    backgroundColor: '#FFFF00',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     width: '100%',
     height: 100,
+    padding: 20,
+  },
+  sectionContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+  sectionList: {
+    marginTop: 20,
+    display: 'flex',
+    justifyContent: 'space-around',
+    flexDirection: 'row',
+  },
+  buttonStyle: {
+    backgroundColor: '#007AFF',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 100,
   },
   container: {
-    display: 'flex',
+    // display: 'flex',
     width: '100%',
     height: '100%',
   },
