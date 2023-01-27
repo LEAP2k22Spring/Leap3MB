@@ -6,20 +6,17 @@
  * @format
  */
 
-import React, {useReducer, useState} from 'react';
+import React, {useReducer, useRef} from 'react';
 import {
-  Alert,
-  Appearance,
+  Animated,
   Button,
-  Keyboard,
+  Easing,
   KeyboardAvoidingView,
   Platform,
   SafeAreaView,
   StyleSheet,
-  Switch,
   Text,
   TextInput,
-  TouchableNativeFeedback,
   View,
 } from 'react-native';
 import {HandThumbUpIcon} from 'react-native-heroicons/solid';
@@ -29,6 +26,8 @@ const initialTodos = {
   value: '',
 };
 const reducer = (state: any, action: any) => {
+  // list.push(action)
+  // [{}.]
   switch (action.type) {
     case 'ADD':
       return {...state, list: [...state.list, action.id, action.payload]};
@@ -40,14 +39,13 @@ const reducer = (state: any, action: any) => {
 };
 
 function App(): JSX.Element {
-  const colorScheme = Appearance.getColorScheme();
-  const [isEnabled, setIsEnabled] = useState(colorScheme === 'light');
+  // const colorScheme = Appearance.getColorScheme();
+  // const [isEnabled, setIsEnabled] = useState(colorScheme === 'light');
   // const [count, setCount] = useState(0);
-  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+  // const toggleSwitch = () => setIsEnabled(previousState => !previousState);
   const [state, dispatch] = useReducer(reducer, initialTodos);
 
   console.log(state);
-  let count = 0;
 
   const handleAdd = () => {
     if (state.value === '') {
@@ -55,7 +53,12 @@ function App(): JSX.Element {
     }
     dispatch({type: 'ADD', id: count++, payload: state.value});
   };
-  function Todos() {}
+
+  const translateA = useRef(new Animated.ValueXY({x: 0, y: 0})).current;
+  const translateB = useRef(new Animated.ValueXY({x: 1, y: 1})).current;
+  const translateC = useRef(new Animated.ValueXY()).current;
+
+  console.log(translateA);
 
   return (
     <SafeAreaView>
@@ -83,18 +86,92 @@ function App(): JSX.Element {
               />
             </View>
           </View>
+          <Button
+            onPress={() => {
+              Animated.timing(translateA, {
+                toValue: 300,
+                duration: 2000,
+                easing: Easing.back(0),
+                useNativeDriver: true,
+              }).start(() => {
+                Animated.timing(translateA, {
+                  toValue: 0,
+                  duration: 2000,
+                  easing: Easing.back(0),
+                  useNativeDriver: true,
+                }).start();
+              });
+              Animated.timing(translateB, {
+                toValue: {x: 2, y: 2},
+                duration: 2000,
+                easing: Easing.back(0),
+                useNativeDriver: true,
+              }).start(() => {
+                Animated.timing(translateB, {
+                  toValue: {x: 1, y: 1},
+                  duration: 2000,
+                  easing: Easing.back(0),
+                  useNativeDriver: true,
+                }).start();
+              });
+              Animated.timing(translateC, {
+                toValue: {x: 1, y: 200},
+                duration: 4000,
+                easing: Easing.ease,
+                useNativeDriver: true,
+              }).start();
+            }}
+            title="Translate"
+            color="black"
+            accessibilityLabel="Learn more about this purple button"
+          />
           <View style={styles.sectionList}>
-            {state.list.map((value: string, index: number) => {
-              return (
-                <Text
-                  style={{
-                    color: isEnabled ? 'black' : 'yellow',
-                  }}>
-                  {index + 1}) {value}
-                </Text>
-              );
-            })}
+            <Animated.View
+              style={[
+                styles.rectangle,
+                {
+                  transform: [
+                    {translateX: translateA.x},
+                    {translateY: translateA.y},
+                  ],
+                },
+              ]}
+            />
           </View>
+          {/* <View style={styles.sectionList}>
+            <Animated.View
+              style={[
+                styles.rectanglX,
+                {
+                  transform: [{scaleX: translateB.x}, {scaleY: translateB.y}],
+                },
+              ]}
+            />
+          </View> */}
+          <View style={styles.sectionList}>
+            <Animated.View
+              style={[
+                styles.rectanglX,
+                {
+                  // opacity: translateC.interpolate({
+                  //   inputRange: [0, 50, 100],
+                  //   outputRange: [0, 4, 1],
+                  // }),
+                  transform: [
+                    {
+                      translateY: translateA.y.interpolate({
+                        inputRange: [0, 0.2, 0.4, 0.8, 1],
+                        outputRange: [0, 100, 0, 100, 0],
+                      }),
+                    },
+                    {translateX: translateA.x},
+                  ],
+                },
+              ]}
+            />
+          </View>
+
+          {/* <Button>Translate</Button> */}
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -139,6 +216,17 @@ const styles = StyleSheet.create({
     padding: 5,
     borderWidth: 1,
   },
+  rectangle: {
+    width: 100,
+    height: 100,
+    backgroundColor: 'black',
+  },
+  rectanglX: {
+    width: 100,
+    height: 100,
+    backgroundColor: 'black',
+  },
 });
 
 export default App;
+let count = 1;
