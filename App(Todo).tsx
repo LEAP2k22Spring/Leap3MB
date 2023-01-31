@@ -31,7 +31,7 @@ const initialTodos = {
 const reducer = (state: any, action: any) => {
   switch (action.type) {
     case 'ADD':
-      return {...state, value:'', list: [...state.list, action.payload]};
+      return {...state, value: '', list: [...state.list, action.payload]};
     case 'DELETE':
       return {
         ...state,

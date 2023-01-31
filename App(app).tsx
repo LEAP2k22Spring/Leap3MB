@@ -6,18 +6,14 @@
  * @format
  */
 
-import React, {useReducer, useRef} from 'react';
+import React from 'react';
 import {
-  Animated,
-  Button,
-  Easing,
   Image,
   KeyboardAvoidingView,
   Platform,
   SafeAreaView,
   StyleSheet,
   Text,
-  TextInput,
   View,
 } from 'react-native';
 function App(): JSX.Element {
@@ -56,7 +52,7 @@ const styles = StyleSheet.create({
   sectionHead: {
     display: 'flex',
     flexDirection: 'row',
-    padding:20
+    padding: 20,
   },
   container: {
     // display: 'flex',
@@ -83,19 +79,19 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   sectionHeadBottom: {
-    width:'100%',
-    height:80,
-    backgroundColor:'#2D2A2B'
+    width: '100%',
+    height: 80,
+    backgroundColor: '#2D2A2B',
   },
-  sectionMenu:{
-    display:'flex',
-    flexDirection:'row',
+  sectionMenu: {
+    display: 'flex',
+    flexDirection: 'row',
   },
-  menuTextStyle:{
-    fontSize:20,
-    paddingHorizontal:20,
-    paddingVertical:10,
-  }
+  menuTextStyle: {
+    fontSize: 20,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+  },
 });
 
 export default App;
